@@ -1,0 +1,866 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Brewed Book Cafe Menu</title>
+    <style>
+        :root {
+            /* 🪵 WOODEN BROWN & GOURMET BISTRO COLOR PALETTE */
+            --primary: #5c4033;
+            --primary-light: #677A04;
+            --bg: #fdfaf6;
+            --surface: #ffffff;
+            --text: #2b1d16;
+            --text-muted: #7a6356;
+            --radius: 16px;
+            --wood-warmth: #f4ece1;
+            --gold-accent: #c49a6c;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', system-ui, sans-serif; }
+        html { scroll-behavior: smooth; scroll-padding-top: 170px; }
+        body { 
+            background: var(--bg); 
+            color: var(--text); 
+            padding-bottom: 120px; 
+            position: relative;
+        } 
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+            opacity: 0.05;
+            background-image: 
+                url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%235c4033'%3E%3Cpath d='M2 21h16v-2H2v2zM20 8h-2V5h2v3zm0-5h-2V1h2v2zm0 10h-2v-3h2v3zM4 19h12v-4H4v4zm0-6h12V5H4v8z'/%3E%3C/svg%3E"),
+                url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%235c4033'%3E%3Cpath d='M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z'/%3E%3C/svg%3E"),
+                url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%235c4033'%3E%3Cpath d='M11 9H9V2H7v7H5V2H3v7c0 2.12 1.66 3.84 3.75 3.97V22h2.5v-8.03c2.09-.13 3.75-1.85 3.75-3.97V22h-2v7zm7-3V2h-2v4c0 2.07 1.35 3.83 3.25 4.42V22h2.5V10.42C23.65 9.83 25 8.07 25 6V2h-2v4c0 1.66-1.34 3-3 3s-3-1.34-3-3z'/%3E%3C/svg%3E");
+            background-position: 10% 20%, 85% 40%, 40% 75%;
+            background-size: 80px 80px, 65px 65px, 90px 90px;
+            background-repeat: no-repeat;
+        }
+        
+        header { 
+            position: sticky;
+            top: 0;
+            padding: 18px 24px; 
+            background: rgba(255, 255, 255, 0.92); 
+            backdrop-filter: blur(12px);
+            box-shadow: 0 4px 30px rgba(92, 64, 51, 0.04); 
+            border-bottom: 1px solid #ebdccb; 
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            align-items: left;
+            justify-content: left;
+        }
+
+        header h1 { 
+            font-size: 2.4rem; 
+            font-weight: 300;  
+            color: var(--primary); 
+            text-align: center; 
+            font-family: 'Cormorant Garamond', 'Didot', Georgia, serif;
+            text-transform: uppercase; 
+            letter-spacing: 0.18em;     
+            text-shadow: 1px 1px 0px rgba(255,255,255,0.8);
+        }
+        .table-banner { 
+            display: inline-block; 
+            background: var(--wood-warmth); 
+            color: var(--primary); 
+            padding: 5px 16px; 
+            border-radius: 20px; 
+            font-weight: 700; 
+            font-size: 0.82rem; 
+            margin-top: 6px; 
+            border: 1px solid #ded0be; 
+            text-align: center;
+            letter-spacing: 0.05em;
+        }
+        
+        .header-action-row {
+            width: 100%;
+            max-width: 600px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            margin-top: 15px;
+            padding: 0 10px;
+        }
+        .search-wrapper { flex: 1; max-width: 82%; margin-left: 45px; margin-right: 15px; }
+        .search-bar-input {
+            width: 100%;
+            padding: 12px 22px;
+            font-size: 0.95rem;
+            border: 1px solid #cbd5e1;
+            border-radius: 30px;
+            outline: none;
+            background: #ffffff;
+            color: var(--text);
+            box-shadow: inset 0 2px 4px rgba(92, 64, 51, 0.03);
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .search-bar-input:focus {
+            border-color: var(--primary-light);
+            background: #ffffff;
+            box-shadow: 0 0 0 4px rgba(139, 90, 43, 0.12), inset 0 2px 4px rgba(0,0,0,0.01);
+        }
+
+        .btn-admin-nav {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: #ffffff;
+            color: var(--primary-light);
+            text-decoration: none;
+            padding: 6px 14px;
+            border-radius: 10px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            border: 1px solid #ebdccb;
+            box-shadow: 0 2px 5px rgba(92, 64, 51, 0.04);
+            transition: all 0.2s ease;
+            z-index: 1010;
+        }
+        .btn-admin-nav:hover { 
+            background: var(--primary); 
+            color: #ffffff; 
+            border-color: var(--primary);
+            box-shadow: 0 4px 10px rgba(92, 64, 51, 0.15);
+        }
+
+        .menu-toggle-btn {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            font-size: 1.8rem;
+            line-height: 1;
+            cursor: pointer;
+            transition: color 0.2s ease;
+            position: absolute;
+            left: 5px; 
+            padding: 1px; 
+            display: flex;
+            align-items: left;
+            justify-content: left;
+            width: 35px;
+        }
+        .menu-toggle-btn:hover { color: var(--primary); }
+
+        .main-layout { max-width: 1200px; margin: 25px auto; display: flex; gap: 30px; padding: 0 15px; }
+
+        .sidebar {
+            width: 240px;
+            background: var(--surface);
+            padding: 24px 20px;
+            border-radius: var(--radius);
+            border: 1px solid #ebdccb;
+            height: fit-content;
+            position: sticky;
+            top: 170px;
+            box-shadow: 0 4px 20px rgba(92, 64, 51, 0.02);
+            transition: transform 0.3s ease;
+        }
+        .sidebar h3 { font-size: 1.05rem; font-weight: 800; color: var(--primary); margin-bottom: 18px; text-transform: uppercase; letter-spacing: 1px; }
+        .category-list { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+        .category-item a { display: block; padding: 11px 16px; color: var(--text-muted); text-decoration: none; font-weight: 600; border-radius: 10px; transition: all 0.2s ease; }
+        .category-item a:hover, .category-item.active a { background: var(--wood-warmth); color: var(--primary); font-weight: 700; transform: translateX(4px); }
+
+        .sidebar-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(43, 29, 22, 0.4); backdrop-filter: blur(3px); z-index: 1500; opacity: 0; transition: opacity 0.3s ease; }
+        .sidebar-overlay.show { opacity: 1; display: block; }
+
+        .content-area { flex: 1; }
+        .section-title { font-size: 1.6rem; font-weight: 700; color: var(--primary); margin: 15px 0 25px; display: flex; align-items: center; gap: 12px; padding-top: 10px; font-family: 'Cormorant Garamond', Georgia, serif; letter-spacing: 0.02em; }
+        .section-title::after { content: ''; flex: 1; height: 2px; background: #e6dacb; }
+
+        .menu-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 25px; margin-bottom: 40px; }
+
+        .card { background: var(--surface); border-radius: var(--radius); box-shadow: 0 4px 20px rgba(92, 64, 51, 0.02); border: 1px solid #ebdccb; display: flex; flex-direction: column; justify-content: space-between; overflow: hidden; transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.25s ease, border-color 0.25s ease; }
+        .card:hover { transform: translateY(-4px); box-shadow: 0 16px 30px rgba(92, 64, 51, 0.08); border-color: var(--gold-accent); }
+
+        .card-img-box { width: 100%; height: 175px; background: var(--wood-warmth); position: relative; overflow: hidden; display: flex; align-items: center; justify-content: center; border-bottom: 1px solid #ebdccb; }
+        .card-img-box img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s ease; }
+        .card:hover .card-img-box img { transform: scale(1.04); }
+        .card-img-box .placeholder-text { color: var(--text-muted); font-size: 0.85rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; text-align: center; padding: 0 10px; }
+
+        .card-info { padding: 22px; flex: 1; display: flex; flex-direction: column; justify-content: space-between; }
+        .card h3 { font-size: 1.3rem; font-weight: 700; color: var(--text); margin-bottom: 8px; line-height: 1.3; font-family: 'Cormorant Garamond', Georgia, serif; }
+        .card p { color: var(--text-muted); font-size: 0.92rem; line-height: 1.5; margin-bottom: 16px; }
+        
+        .price { font-size: 1.4rem; font-weight: 800; color: var(--primary-light); margin-bottom: 14px; }
+        .note-input { width: 100%; padding: 10px 14px; border: 1px solid #dcd1c4; border-radius: 8px; font-size: 0.85rem; outline: none; margin-bottom: 14px; background: #faf8f5; color: var(--text); box-shadow: inset 0 1px 2px rgba(0,0,0,0.02); transition: all 0.2s; }
+        .note-input:focus { border-color: var(--primary-light); background: #fff; box-shadow: 0 0 0 3px rgba(139, 90, 43, 0.08); }
+        
+        button { width: 100%; padding: 12px; border: none; background: var(--primary); color: #fff; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 0.95rem; letter-spacing: 0.03em; box-shadow: 0 2px 6px rgba(92, 64, 51, 0.12); transition: background 0.2s, transform 0.1s, box-shadow 0.2s; }
+        button:hover { background: #452f25; box-shadow: 0 4px 12px rgba(92, 64, 51, 0.25); }
+        button:active { transform: scale(0.98); }
+        
+        .popup-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(43, 29, 22, 0.6); backdrop-filter: blur(5px); display: flex; align-items: center; justify-content: center; opacity: 0; visibility: hidden; z-index: 9999; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+        .popup-overlay.show { opacity: 1; visibility: visible; }
+        .popup-box { background: var(--surface); padding: 40px 30px; border-radius: 24px; text-align: center; max-width: 410px; width: 90%; box-shadow: 0 30px 60px -12px rgba(43, 29, 22, 0.3); border: 1px solid #ebdccb; border-bottom: none; }
+        .popup-icon { width: 60px; height: 60px; background: var(--wood-warmth); color: var(--primary-light); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 22px; font-size: 26px; font-weight: bold; }
+        .btn-close { background: var(--primary); color: #fff; margin-top: 18px; }
+        .btn-close:hover { background: #452f25; }
+
+        .order-tracker-panel { position: fixed; bottom: 0; left: 0; width: 100%; background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); border-top: 3px solid var(--primary); box-shadow: 0 -10px 40px rgba(92, 64, 51, 0.1); padding: 16px 24px; z-index: 999; display: none; }
+        .tracker-container { max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px; }
+        .tracker-info h4 { font-size: 1.15rem; font-weight: 700; color: var(--primary); font-family: 'Cormorant Garamond', Georgia, serif; }
+        .tracker-info p { font-size: 0.9rem; color: var(--text-muted); }
+        .tracker-actions { display: flex; gap: 12px; }
+        .btn-track-edit { background: var(--wood-warmth); color: var(--text); padding: 9px 18px; border-radius: 8px; font-size: 0.9rem; font-weight: 600; cursor: pointer; border: 1px solid #ded0be; transition: background 0.2s; }
+        .btn-track-edit:hover { background: #ebdccb; }
+        .btn-track-cancel { background: #fff1f2; color: #e11d48; padding: 9px 18px; border-radius: 8px; font-size: 0.9rem; font-weight: 600; cursor: pointer; border: 1px solid #ffe4e6; transition: all 0.2s; }
+        .btn-track-cancel:hover { background: #e11d48; color: #fff; box-shadow: 0 4px 12px rgba(225, 29, 72, 0.2); }
+
+        .cart-drawer-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(43, 29, 22, 0.5); backdrop-filter: blur(4px); z-index: 5000; opacity: 0; visibility: hidden; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
+        .cart-drawer-overlay.show { opacity: 1; visibility: visible; }
+        .cart-drawer { position: fixed; bottom: 0; left: 50%; transform: translate(-50%, 100%); width: 100%; max-width: 550px; background: var(--surface); border-top-left-radius: 24px; border-top-right-radius: 24px; box-shadow: 0 -10px 40px rgba(43, 29, 22, 0.15); z-index: 5001; transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1); max-height: 85vh; display: flex; flex-direction: column; border: 1px solid #ebdccb; border-bottom: none; }
+        .cart-drawer.show { transform: translate(-50%, 0); }
+        .cart-header { padding: 20px 24px; border-bottom: 1px solid #ebdccb; display: flex; justify-content: space-between; align-items: center; background: var(--wood-warmth); border-top-left-radius: 22px; border-top-right-radius: 22px; }
+        .cart-header h2 { font-family: 'Cormorant Garamond', Georgia, serif; color: var(--primary); font-size: 1.5rem; font-weight: 700; }
+        .cart-close-btn { background: none; border: none; font-size: 1.5rem; color: var(--text-muted); cursor: pointer; width: auto; padding: 0; box-shadow: none; }
+        .cart-items-list { padding: 20px 24px; overflow-y: auto; flex: 1; display: flex; flex-direction: column; gap: 16px; }
+        .cart-item-row { display: flex; flex-direction: column; padding-bottom: 16px; border-bottom: 1px solid #f4ece1; gap: 8px; }
+        .cart-item-main { display: flex; justify-content: space-between; align-items: center; }
+        .cart-item-details h4 { font-size: 1.1rem; color: var(--text); font-family: 'Cormorant Garamond', Georgia, serif; font-weight: 700; }
+        .cart-item-details p { font-size: 0.85rem; color: var(--primary-light); font-weight: 700; }
+        .cart-qty-controls { display: flex; align-items: center; gap: 12px; background: var(--wood-warmth); padding: 4px 10px; border-radius: 20px; border: 1px solid #ded0be; }
+        .cart-qty-btn { background: none; border: none; color: var(--primary); font-size: 1.1rem; font-weight: 700; cursor: pointer; padding: 0 4px; width: auto; box-shadow: none; }
+        .cart-qty-value { font-size: 0.95rem; font-weight: 700; color: var(--text); min-width: 16px; text-align: center; }
+        .cart-item-note-box { width: 100%; }
+        .cart-item-note-box input { width: 100%; padding: 8px 12px; border: 1px solid #dcd1c4; border-radius: 8px; font-size: 0.8rem; outline: none; background: #faf8f5; color: var(--text); }
+        .cart-item-note-box input:focus { border-color: var(--primary-light); background: #fff; }
+        .cart-footer { padding: 20px 24px; border-top: 1px solid #ebdccb; background: #ffffff; display: flex; flex-direction: column; gap: 12px; }
+        .cart-total-row { display: flex; justify-content: space-between; font-size: 1.1rem; font-weight: 700; color: var(--text); }
+        .cart-total-price { color: var(--primary-light); font-size: 1.25rem; font-weight: 800; }
+        .floating-cart-trigger { position: fixed; bottom: 24px; right: 24px; background: var(--primary); color: #ffffff; border-radius: 50px; padding: 14px 24px; display: flex; align-items: center; gap: 10px; font-weight: 700; box-shadow: 0 10px 25px rgba(92, 64, 51, 0.3); z-index: 4000; cursor: pointer; border: 1px solid #ebdccb; transition: transform 0.2s ease; }
+        .floating-cart-trigger:active { transform: scale(0.95); }
+        .floating-cart-count { background: var(--primary-light); color: #fff; font-size: 0.8rem; padding: 2px 8px; border-radius: 20px; font-weight: 700; }
+        
+        .cute-footer { background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%); color: #f7f9fa; padding: 50px 20px 20px; margin-top: 60px; border-top-left-radius: 40px; border-top-right-radius: 40px; box-shadow: 0 -10px 25px rgba(0, 0, 0, 0.05); font-family: inherit; }
+        .footer-content { display: flex; flex-wrap: wrap; justify-content: space-around; align-items: center; max-width: 1100px; margin: 0 auto; gap: 30px; }
+        .footer-brand h3 { margin: 0 0 8px 0; font-size: 1.6rem; color: #ff9a9e; font-weight: 700; letter-spacing: 0.5px; }
+        .footer-brand p { margin: 0; color: #a0aab2; font-size: 0.95rem; }
+        .footer-contact h4 { margin: 0 0 15px 0; font-size: 1.3rem; color: #fecfef; }
+        .footer-contact ul { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 12px; }
+        .footer-contact li { font-size: 1rem; display: flex; align-items: center; gap: 10px; }
+        .footer-contact .icon { font-size: 1.1rem; }
+        .footer-contact a { color: #e2e8f0; text-decoration: none; transition: color 0.3s ease, transform 0.3s ease; display: inline-block; }
+        .footer-contact a:hover { color: #a1c4fd; transform: translateY(-3px) scale(1.05); }
+        .footer-bottom { text-align: center; margin-top: 40px; padding-top: 20px; border-top: 1px solid rgba(255, 255, 255, 0.08); font-size: 0.85rem; color: #718096; }
+
+        @media (max-width: 600px) { .footer-content { flex-direction: column; text-align: center; } .footer-contact ul { align-items: center; } }
+        
+        @media (max-width: 768px) {
+            header { padding: 55px 15px 15px 15px; }
+            .btn-admin-nav { top: 12px; right: 12px; font-size: 0.75rem; padding: 5px 12px; }
+            header h1 { font-size: 1.5rem; letter-spacing: 0.12em; }
+            .search-bar-input { padding: 10px 16px; font-size: 0.88rem; text-align: center; }
+            .main-layout { padding: 0 10px; margin: 5px auto; gap: 0; }
+            input.search-bar, textarea#specialInstructions { font-size: 16px !important; }
+            
+            .sidebar { position: fixed; top: 0; left: 0; width: 260px; height: 100%; background: #ffffff; z-index: 2000; padding: 30px 20px; border-radius: 0; border: none; box-shadow: 12px 0 40px rgba(43,29,22,0.15); transform: translateX(-100%); }
+            .sidebar.open { transform: translateX(0); }
+            .sidebar h3 { display: block; font-size: 1.2rem; border-bottom: 2px solid var(--wood-warmth); padding-bottom: 12px; }
+            .category-list { flex-direction: column; gap: 12px; margin-top: 15px; }
+            .category-item a { padding: 12px 16px; font-size: 1rem; }
+            .category-item a:hover, .category-item.active a { transform: translateX(0); }
+
+            .menu-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; margin-bottom: 30px; }
+            .card-img-box { height: 240px; } 
+            .card-info { padding: 11px; }
+            .card h3 { font-size: 1.05rem; margin-bottom: 4px; }
+            .card p { font-size: 0.8rem; line-height: 1.4; margin-bottom: 10px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+            .price { font-size: 1.15rem; margin-bottom: 10px; }
+            .note-input { padding: 8px 10px; font-size: 0.75rem; margin-bottom: 10px; border-radius: 6px; }
+            button { padding: 10px; font-size: 0.85rem; border-radius: 6px; }
+            .floating-cart-trigger { bottom: 16px; right: 16px; padding: 12px 18px; font-size: 1rem; }
+        }
+        .featured-card { min-height: 320px; }
+        .featured-card .card-img-box { height: 400px; }
+        
+        .developer-credit { margin-top: 40px; padding-top: 15px; padding-bottom: 15px; text-align: center; border-top: 1px solid #e0e0e0; }
+        .developer-credit p { margin: 0; font-size: 0.85rem; color: #777; line-height: 1.5; }
+        .developer-credit .dev-name { font-weight: 600; color: #333; }
+    </style>
+</head>
+<body>
+<!-- Loading Screen Overlay with Olive Green Theme -->
+    <div id="page-loader" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: #f7f9f4; display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 9999; transition: opacity 0.5s ease;">
+        <div class="spinner" style="width: 55px; height: 55px; border: 4px solid #d0dbcc; border-top: 4px solid #556b2f; border-radius: 50%; animation: spin 0.9s linear infinite;"></div>
+        <p style="margin-top: 18px; font-family: 'Segoe UI', sans-serif; color: #3b4d21; font-size: 1.1rem; font-weight: 600; letter-spacing: 1.2px;">Menu is loading</p>
+        <p style="margin-top: 6px; font-family: 'Segoe UI', sans-serif; color: #607d3b; font-size: 0.85rem; font-weight: 500; letter-spacing: 0.8px;">Developed by BC</p>
+    </div>
+
+    <style>
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+<div class="sidebar-overlay" id="menuOverlay" onclick="closeMobileSidebar()"></div>
+
+<header>
+    <a href="login.php" class="btn-admin-nav">🔑 Admin</a>
+    <h1>Brewed Book Cafe</h1>
+    <div class="table-banner" id="tableDisplay">Checking Location...</div>
+    <div class="header-action-row">
+        <button class="menu-toggle-btn" onclick="openMobileSidebar()">&#9776;</button>
+        <div class="search-wrapper">
+            <input type="text" id="foodSearchBox" class="search-bar-input" placeholder="🔍 Search food or drinks..." onkeyup="filterFoodLedgerMenu()" autocomplete="off">
+        </div>
+    </div>
+</header>
+
+<div class="main-layout">
+    <aside class="sidebar" id="categoriesSidebar">
+        <h3>Categories</h3>
+        <ul class="category-list">
+            <li class="category-item active"><a href="#coffee" onclick="handleCategoryClick(event, '#coffee')">☕ Coffee & Tea</a></li>
+            <li class="category-item"><a href="#drinks" onclick="handleCategoryClick(event, '#drinks')">🥤 Cold Drinks</a></li>
+            <li class="category-item"><a href="#breakfast" onclick="handleCategoryClick(event, '#breakfast')">🍳 Breakfast & Rolls</a></li>
+            <li class="category-item"><a href="#momo" onclick="handleCategoryClick(event, '#momo')">🥟 Mo:Mo</a></li>
+            <li class="category-item"><a href="#noodles" onclick="handleCategoryClick(event, '#noodles')">🍝 Noodles & Pasta</a></li>
+            <li class="category-item"><a href="#burger" onclick="handleCategoryClick(event, '#burger')">🍔 Burger & Sandwich</a></li>
+            <li class="category-item"><a href="#pizza" onclick="handleCategoryClick(event, '#pizza')">🍕 Pizza</a></li>
+            <li class="category-item"><a href="#veg" onclick="handleCategoryClick(event, '#veg')">🥗 Veg Starters</a></li>
+            <li class="category-item"><a href="#nonveg" onclick="handleCategoryClick(event, '#nonveg')">🍗 Non-Veg Starters</a></li>
+            <li class="category-item"><a href="#rice" onclick="handleCategoryClick(event, '#rice')">🍛 Rice & Curry</a></li>
+            <li class="category-item"><a href="#soup" onclick="handleCategoryClick(event, '#soup')">🍲 Soup & Salad</a></li>
+            <li class="category-item"><a href="#sets" onclick="handleCategoryClick(event, '#sets')">🍱 Sets & Platters</a></li>
+            <li class="category-item"><a href="#tea" onclick="handleCategoryClick(event, '#tea')">🍵 Tea / Chiya</a></li>
+        </ul>
+
+        <div class="developer-credit">
+            <p>Developed by <br><span class="dev-name">Anurag BC</span></p>
+        </div>
+    </aside>
+
+    <main class="content-area">
+        
+      
+        
+        <!-- COFFEE & TEA -->
+        <h2 class="section-title" id="coffee">Coffee & Hot Beverages</h2>
+        <div class="menu-grid">
+            <div class="card"><div class="card-img-box"><img src="Americano.webp" alt="Americano Royale" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';"><div class="placeholder-text" style="display:none;">Americano Royale</div></div><div class="card-info"><div><h3>Americano Royale</h3><p>Black Coffee</p></div><form class="ajax-order-form"><div class="price">Rs. 200</div><input type="hidden" name="item" value="Americano Royale"><input type="hidden" name="price" value="200"><input type="hidden" name="table_number" class="table-hidden-input" value="Takeaway"><input type="text" name="note" class="note-input" placeholder="Custom requests..."><button type="submit">Order Now</button></form></div></div>
+           
+            <div class="card"><div class="card-img-box"><img src="esp.webp" alt="Espresso" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';"><div class="placeholder-text" style="display:none;">Espresso</div></div><div class="card-info"><div><h3>Espresso (Single)</h3><p>Black Coffee</p></div><form class="ajax-order-form"><div class="price">Rs. 100</div><input type="hidden" name="item" value="Espresso Single"><input type="hidden" name="price" value="100"><input type="hidden" name="table_number" class="table-hidden-input" value="Takeaway"><input type="text" name="note" class="note-input" placeholder="Custom requests..."><button type="submit">Order Now</button></form></div></div>
+           <div class="card"><div class="card-img-box"><img src="espc2.webp" alt="Espresso Conpanna" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';"><div class="placeholder-text" style="display:none;">Espresso Conpanna</div></div><div class="card-info"><div><h3>Espresso Conpanna</h3><p>Black Coffee</p></div><form class="ajax-order-form"><div class="price">Rs. 130</div><input type="hidden" name="item" value="Espresso Conpanna"><input type="hidden" name="price" value="130"><input type="hidden" name="table_number" class="table-hidden-input" value="Takeaway"><input type="text" name="note" class="note-input" placeholder="Custom requests..."><button type="submit">Order Now</button></form></div></div>
+          
+            <div class="card"><div class="card-img-box"><img src="capu.webp" alt="Cappuccino" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';"><div class="placeholder-text" style="display:none;">Cappuccino</div></div><div class="card-info"><div><h3>Cappuccino</h3><p>Milk Coffee</p></div><form class="ajax-order-form"><div class="price">Rs. 160</div><input type="hidden" name="item" value="Cappuccino"><input type="hidden" name="price" value="160"><input type="hidden" name="table_number" class="table-hidden-input" value="Takeaway"><input type="text" name="note" class="note-input" placeholder="Custom requests..."><button type="submit">Order Now</button></form></div></div>
+            <div class="card"><div class="card-img-box"><img src="clatte.webp" alt="Cafe Latte" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';"><div class="placeholder-text" style="display:none;">Cafe Latte</div></div><div class="card-info"><div><h3>Cafe Latte</h3><p>Milk Coffee</p></div><form class="ajax-order-form"><div class="price">Rs. 150</div><input type="hidden" name="item" value="Cafe Latte"><input type="hidden" name="price" value="150"><input type="hidden" name="table_number" class="table-hidden-input" value="Takeaway"><input type="text" name="note" class="note-input" placeholder="Custom requests..."><button type="submit">Order Now</button></form></div></div>
+            <div class="card"><div class="card-img-box"><img src="fwhite.webp" alt="Flat white" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';"><div class="placeholder-text" style="display:none;">Flat white</div></div><div class="card-info"><div><h3>Flat white</h3><p>Milk Coffee</p></div><form class="ajax-order-form"><div class="price">Rs. 160</div><input type="hidden" name="item" value="Flat white"><input type="hidden" name="price" value="160"><input type="hidden" name="table_number" class="table-hidden-input" value="Takeaway"><input type="text" name="note" class="note-input" placeholder="Custom requests..."><button type="submit">Order Now</button></form></div></div>
+            <div class="card"><div class="card-img-box"><img src="matchalatte.webp" alt="Matcha latte" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';"><div class="placeholder-text" style="display:none;">Matcha latte</div></div><div class="card-info"><div><h3>Matcha latte</h3><p>Milk Coffee</p></div><form class="ajax-order-form"><div class="price">Rs. 180</div><input type="hidden" name="item" value="Matcha latte"><input type="hidden" name="price" value="180"><input type="hidden" name="table_number" class="table-hidden-input" value="Takeaway"><input type="text" name="note" class="note-input" placeholder="Custom requests..."><button type="submit">Order Now</button></form></div></div>
+            <div class="card"><div class="card-img-box"><img src="hchoco.webp" alt="Hot Chocolate" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';"><div class="placeholder-text" style="display:none;">Hot Chocolate</div></div><div class="card-info"><div><h3>Hot Chocolate</h3><p>Hot Beverage</p></div><form class="ajax-order-form"><div class="price">Rs. 180</div><input type="hidden" name="item" value="Hot Chocolate"><input type="hidden" name="price" value="180"><input type="hidden" name="table_number" class="table-hidden-input" value="Takeaway"><input type="text" name="note" class="note-input" placeholder="Custom requests..."><button type="submit">Order Now</button></form></div></div>
+            <div class="card"><div class="card-img-box"><img src="placeholder.webp" alt="Green Tea Pot" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';"><div class="placeholder-text" style="display:none;">Green Tea Pot</div></div><div class="card-info"><div><h3>Green Tea Pot</h3><p>Hot Beverage</p></div><form class="ajax-order-form"><div class="price">Rs. 300</div><input type="hidden" name="item" value="Green Tea Pot"><input type="hidden" name="price" value="300"><input type="hidden" name="table_number" class="table-hidden-input" value="Takeaway"><input type="text" name="note" class="note-input" placeholder="Custom requests..."><button type="submit">Order Now</button></form></div></div>
+        </div>
+        
+        <!-- TEA / CHIYA -->
+        <h2 class="section-title" id="tea">Tea / Chiya</h2>
+        <div class="menu-grid">
+            <div class="card"><div class="card-img-box"><img src="matka tea.webp" alt="Matka Tea" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';"><div class="placeholder-text" style="display:none;">Matka Tea</div></div><div class="card-info"><div><h3>Matka Tea</h3><p>Tea / Chiya</p></div><form class="ajax-order-form"><div class="price">Rs. 50</div><input type="hidden" name="item" value="Matka Tea"><input type="hidden" name="price" value="50"><input type="hidden" name="table_number" class="table-hidden-input" value="Takeaway"><input type="text" name="note" class="note-input" placeholder="Custom requests..."><button type="submit">Order Now</button></form></div></div>
+            <div class="card"><div class="card-img-box"><img src="elaichi.webp" alt="Elaichi Chiya" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';"><div class="placeholder-text" style="display:none;">Elaichi Chiya</div></div><div class="card-info"><div><h3>Elaichi Chiya</h3><p>Tea / Chiya</p></div><form class="ajax-order-form"><div class="price">Rs. 50</div><input type="hidden" name="item" value="Elaichi Chiya"><input type="hidden" name="price" value="50"><input type="hidden" name="table_number" class="table-hidden-input" value="Takeaway"><input type="text" name="note" class="note-input" placeholder="Custom requests..."><button type="submit">Order Now</button></form></div></div>
+            <div class="card"><div class="card-img-box"><img src="masala chiya.webp" alt="Masala Chiya" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';"><div class="placeholder-text" style="display:none;">Masala Chiya</div></div><div class="card-info"><div><h3>Masala Chiya</h3><p>Tea / Chiya</p></div><form class="ajax-order-form"><div class="price">Rs. 50</div><input type="hidden" name="item" value="Masala Chiya"><input type="hidden" name="price" value="50"><input type="hidden" name="table_number" class="table-hidden-input" value="Takeaway"><input type="text" name="note" class="note-input" placeholder="Custom requests..."><button type="submit">Order Now</button></form></div></div>
+        </div>
+        
+
+        <!-- COLD DRINKS -->
+        <h2 class="section-title" id="drinks">Cold Drinks & Shakes</h2>
+        <div class="menu-grid">
+            <div class="card"><div class="card-img-box"><img src="slassi.webp" alt="Sweet Lassi" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';"><div class="placeholder-text" style="display:none;">Sweet Lassi</div></div><div class="card-info"><div><h3>Sweet Lassi</h3><p>Lassi</p></div><form class="ajax-order-form"><div class="price">Rs. 170</div><input type="hidden" name="item" value="Sweet Lassi"><input type="hidden" name="price" value="170"><input type="hidden" name="table_number" class="table-hidden-input" value="Takeaway"><input type="text" name="note" class="note-input" placeholder="Custom requests..."><button type="submit">Order Now</button></form></div></div>
+             <div class="card"><div class="card-img-box"><img src="strawlassi.webp" alt="Strawberry Lassi" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';"><div class="placeholder-text" style="display:none;">Strawberry Lassi</div></div><div class="card-info"><div><h3>Strawberry Lassi</h3><p>Lassi</p></div><form class="ajax-order-form"><div class="price">Rs. 170</div><input type="hidden" name="item" value="Strawberry Lassi"><input type="hidden" name="price" value="170"><input type="hidden" name="table_number" class="table-hidden-input" value="Takeaway"><input type="text" name="note" class="note-input" placeholder="Custom requests..."><button type="submit">Order Now</button></form></div></div>
+            <div class="card"><div class="card-img-box"><img src="blassi.webp" alt="Banana Lassi" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';"><div class="placeholder-text" style="display:none;">Banana Lassi</div></div><div class="card-info"><div><h3>Banana Lassi</h3><p>Lassi</p></div><form class="ajax-order-form"><div class="price">Rs. 170</div><input type="hidden" name="item" value="Banana Lassi"><input type="hidden" name="price" value="170"><input type="hidden" name="table_number" class="table-hidden-input" value="Takeaway"><input type="text" name="note" class="note-input" placeholder="Custom requests..."><button type="submit">Order Now</button></form></div></div>
+            <div class="card"><div class="card-img-box"><img src="VirginM.webp" alt="Virgin Mojito" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';"><div class="placeholder-text" style="display:none;">Virgin Mojito</div></div><div class="card-info"><div><h3>Virgin Mojito</h3><p>Mocktail</p></div><form class="ajax-order-form"><div class="price">Rs. 190</div><input type="hidden" name="item" value="Virgin Mojito"><input type="hidden" name="price" value="190"><input type="hidden" name="table_number" class="table-hidden-input" value="Takeaway"><input type="text" name="note" class="note-input" placeholder="Custom requests..."><button type="submit">Order Now</button></form></div></div>
+            <div class="card"><div class="card-img-box"><img src="bhawa.webp" alt="Blue Hawayain" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';"><div class="placeholder-text" style="display:none;">Blue Hawayain</div></div><div class="card-info"><div><h3>Blue Hawayain</h3><p>Mocktail</p></div><form class="ajax-order-form"><div class="price">Rs. 290</div><input type="hidden" name="item" value="Blue Hawayain"><input type="hidden" name="price" value="290"><input type="hidden" name="table_number" class="table-hidden-input" value="Takeaway"><input type="text" name="note" class="note-input" placeholder="Custom requests..."><button type="submit">Order Now</button></form></div></div>
+            <div class="card"><div class="card-img-box"><img src="IMG_6311.webp" alt="Mickey Mouse" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';"><div class="placeholder-text" style="display:none;">Mickey Mouse</div></div><div class="card-info"><div><h3>Mickey Mouse</h3><p>Mocktail</p></div><form class="ajax-order-form"><div class="price">Rs. 280</div><input type="hidden" name="item" value="Mickey Mouse"><input type="hidden" name="price" value="280"><input type="hidden" name="table_number" class="table-hidden-input" value="Takeaway"><input type="text" name="note" class="note-input" placeholder="Custom requests..."><button type="submit">Order Now</button></form></div></div>
+            <div class="card"><div class="card-img-box"><img src="IMG_6310.webp" alt="Cinderella" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';"><div class="placeholder-text" style="display:none;">Cinderella</div></div><div class="card-info"><div><h3>Cinderella</h3><p>Mocktail</p></div><form class="ajax-order-form"><div class="price">Rs. 300</div><input type="hidden" name="item" value="Cinderella"><input type="hidden" name="price" value="300"><input type="hidden" name="table_number" class="table-hidden-input" value="Takeaway"><input type="text" name="note" class="note-input" placeholder="Custom requests..."><button type="submit">Order Now</button></form></div></div>
+            <div class="card"><div class="card-img-box"><img src="placeholder.webp" alt="Ice Americano" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';"><div class="placeholder-text" style="display:none;">Ice Americano</div></div><div class="card-info"><div><h3>Ice Americano</h3><p>Cold Beverage</p></div><form class="ajax-order-form"><div class="price">Rs. 140</div><input type="hidden" name="item" value="Ice Americano"><input type="hidden" name="price" value="140"><input type="hidden" name="table_number" class="table-hidden-input" value="Takeaway"><input type="text" name="note" class="note-input" placeholder="Custom requests..."><button type="submit">Order Now</button></form></div></div>
+            <div class="card"><div class="card-img-box"><img src="omilkshake.webp" alt="Oreo Shake" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';"><div class="placeholder-text" style="display:none;">Oreo Shake</div></div><div class="card-info"><div><h3>Oreo Shake</h3><p>Shake</p></div><form class="ajax-order-form"><div class="price">Rs. 250</div><input type="hidden" name="item" value="Oreo Shake"><input type="hidden" name="price" value="250"><input type="hidden" name="table_number" class="table-hidden-input" value="Takeaway"><input type="text" name="note" class="note-input" placeholder="Custom requests..."><button type="submit">Order Now</button></form></div></div>
+            <div class="card"><div class="card-img-box"><img src="kitkatmilks.webp" alt="Kitkat Shake" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';"><div class="placeholder-text" style="display:none;">Kitkat Shake</div></div><div class="card-info"><div><h3>Kitkat Shake</h3><p>Shake</p></div><form class="ajax-order-form"><div class="price">Rs. 250</div><input type="hidden" name="item" value="Kitkat Shake"><input type="hidden" name="price" value="250"><input type="hidden" name="table_number" class="table-hidden-input" value="Takeaway"><input type="text" name="note" class="note-input" placeholder="Custom requests..."><button type="submit">Order Now</button></form></div></div>
+            <div class="card"><div class="card-img-box"><img src="wjuice.webp" alt="Watermelon Juice" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';"><div class="placeholder-text" style="display:none;">Watermelon Juice</div></div><div class="card-info"><div><h3>Watermelon Juice</h3><p>Fresh Juice</p></div><form class="ajax-order-form"><div class="price">Rs. 180</div><input type="hidden" name="item" value="Watermelon Juice"><input type="hidden" name="price" value="180"><input type="hidden" name="table_number" class="table-hidden-input" value="Takeaway"><input type="text" name="note" class="note-input" placeholder="Custom requests..."><button type="submit">Order Now</button></form></div></div>
+          
+        </div>
+        
+        <!-- BREAKFAST & ROLLS -->
+        <h2 class="section-title" id="breakfast">Breakfast & Rolls</h2>
+        <div class="menu-grid">
+            <div class="card"><div class="card-img-box"><img src="IMG_6304.webp" alt="Indian Breakfast" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';"><div class="placeholder-text" style="display:none;">Indian Breakfast</div></div><div class="card-info"><div><h3>Indian Breakfast</h3><p>Aloo Paratha, Pickle, Curry, and Dahi</p></div><form class="ajax-order-form"><div class="price">Rs. 250</div><input type="hidden" name="item" value="Indian Breakfast"><input type="hidden" name="price" value="250"><input type="hidden" name="table_number" class="table-hidden-input" value="Takeaway"><input type="text" name="note" class="note-input" placeholder="Custom requests..."><button type="submit">Order Now</button></form></div></div>
+            <div class="card"><div class="card-img-box"><img src="IMG_6289.webp" alt="bread omelet" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';"><div class="placeholder-text" style="display:none;">bread omelet</div></div><div class="card-info"><div><h3>bread omelet</h3><p>Breakfast</p></div><form class="ajax-order-form"><div class="price">Rs. 150</div><input type="hidden" name="item" value="bread omelet"><input type="hidden" name="price" value="150"><input type="hidden" name="table_number" class="table-hidden-input" value="Takeaway"><input type="text" name="note" class="note-input" placeholder="Custom requests..."><button type="submit">Order Now</button></form></div></div>
+            <div class="card"><div class="card-img-box"><img src="IMG_6288.webp" alt="butter bread" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';"><div class="placeholder-text" style="display:none;">butter bread</div></div><div class="card-info"><div><h3>butter bread</h3><p>Breakfast</p></div><form class="ajax-order-form"><div class="price">Rs. 100</div><input type="hidden" name="item" value="butter bread"><input type="hidden" name="price" value="100"><input type="hidden" name="table_number" class="table-hidden-input" value="Takeaway"><input type="text" name="note" class="note-input" placeholder="Custom requests..."><button type="submit">Order Now</button></form></div></div>
+            <div class="card"><div class="card-img-box"><img src="abreakfast.webp" alt="American Breakfast" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';"><div class="placeholder-text" style="display:none;">American Breakfast</div></div><div class="card-info"><div><h3>American Breakfast</h3><p>Breakfast</p></div><form class="ajax-order-form"><div class="price">Rs. 280</div><input type="hidden" name="item" value="American Breakfast"><input type="hidden" name="price" value="280"><input type="hidden" name="table_number" class="table-hidden-input" value="Takeaway"><input type="text" name="note" class="note-input" placeholder="Custom requests..."><button type="submit">Order Now</button></form></div></div>
+            <div class="card"><div class="card-img-box"><img src="eb.webp" alt="English Breakfast" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';"><div class="placeholder-text" style="display:none;">English Breakfast</div></div><div class="card-info"><div><h3>English Breakfast</h3><p>Breakfast</p></div><form class="ajax-order-form"><div class="price">Rs. 260</div><input type="hidden" name="item" value="English Breakfast"><input type="hidden" name="price" value="260"><input type="hidden" name="table_number" class="table-hidden-input" value="Takeaway"><input type="text" name="note" class="note-input" placeholder="Custom requests..."><button type="submit">Order Now</button></form></div></div>
+            <div class="card"><div class="card-img-box"><img src="croll.webp" alt="Chicken Roll" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';"><div class="placeholder-text" style="display:none;">Chicken Roll</div></div><div class="card-info"><div><h3>Chicken Roll</h3><p>Rolls Item</p></div><form class="ajax-order-form"><div class="price">Rs. 270</div><input type="hidden" name="item" value="Chicken Roll"><input type="hidden" name="price" value="270"><input type="hidden" name="table_number" class="table-hidden-input" value="Takeaway"><input type="text" name="note" class="note-input" placeholder="Custom requests..."><button type="submit">Order Now</button></form></div></div>
+            <div class="card"><div class="card-img-box"><img src="vroll.webp" alt="Veg Roll" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';"><div class="placeholder-text" style="display:none;">Veg Roll</div></div><div class="card-info"><div><h3>Veg. Roll</h3><p>Rolls Item</p></div><form class="ajax-order-form"><div class="price">Rs. 180</div><input type="hidden" name="item" value="Veg Roll"><input type="hidden" name="price" value="180"><input type="hidden" name="table_number" class="table-hidden-input" value="Takeaway"><input type="text" name="note" class="note-input" placeholder="Custom requests..."><button type="submit">Order Now</button></form></div></div>
+        </div>
+
+        <!-- MO:MO -->
+        <h2 class="section-title" id="momo">Mo:Mo Items</h2>
+        <div class="menu-grid">
+            <div class="card"><div class="card-img-box"><img src="Scmomo.webp" alt="Chicken Steam Momo" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';"><div class="placeholder-text" style="display:none;">Chicken Steam Momo</div></div><div class="card-info"><div><h3>Chicken Steam Mo:Mo</h3><p>Mo:Mo Items</p></div><form class="ajax-order-form"><div class="price">Rs. 210</div><input type="hidden" name="item" value="Chicken Steam Momo"><input type="hidden" name="price" value="210"><input type="hidden" name="table_number" class="table-hidden-input" value="Takeaway"><input type="text" name="note" class="note-input" placeholder="Custom requests..."><button type="submit">Order Now</button></form></div></div>
+            <div class="card"><div class="card-img-box"><img src="Svmomo.webp" alt="Veg Steam Momo" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';"><div class="placeholder-text" style="display:none;">Veg Steam Momo</div></div><div class="card-info"><div><h3>Veg Steam Mo:Mo</h3><p>Mo:Mo Items</p></div><form class="ajax-order-form"><div class="price">Rs. 170</div><input type="hidden" name="item" value="Veg Steam Momo"><input type="hidden" name="price" value="170"><input type="hidden" name="table_number" class="table-hidden-input" value="Takeaway"><input type="text" name="note" class="note-input" placeholder="Custom requests..."><button type="submit">Order Now</button></form></div></div>
+            <div class="card"><div class="card-img-box"><img src="friedm3.webp" alt="Chicken Fried Momo" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';"><div class="placeholder-text" style="display:none;">Chicken Fried Momo</div></div><div class="card-info"><div><h3>Chicken Fried Mo:Mo</h3><p>Mo:Mo Items</p></div><form class="ajax-order-form"><div class="price">Rs. 230</div><input type="hidden" name="item" value="Chicken Fried Momo"><input type="hidden" name="price" value="230"><input type="hidden" name="table_number" class="table-hidden-input" value="Takeaway"><input type="text" name="note" class="note-input" placeholder="Custom requests..."><button type="submit">Order Now</button></form></div></div>
+            <div class="card"><div class="card-img-box"><img src="ccmomo.webp" alt="Chicken C Momo" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';"><div class="placeholder-text" style="display:none;">Chicken C Momo</div></div><div class="card-info"><div><h3>Chicken C Mo:Mo</h3><p>Mo:Mo Items</p></div><form class="ajax-order-form"><div class="price">Rs. 250</div><input type="hidden" name="item" value="Chicken C Momo"><input type="hidden" name="price" value="250"><input type="hidden" name="table_number" class="table-hidden-input" value="Takeaway"><input type="text" name="note" class="note-input" placeholder="Custom requests..."><button type="submit">Order Now</button></form></div></div>
+            <div class="card"><div class="card-img-box"><img src="jmomo.webp" alt="Chicken Jhol Momo" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';"><div class="placeholder-text" style="display:none;">Chicken Jhol Momo</div></div><div class="card-info"><div><h3>Chicken Jhol Mo:Mo</h3><p>Mo:Mo Items</p></div><form class="ajax-order-form"><div class="price">Rs. 270</div><input type="hidden" name="item" value="Chicken Jhol Momo"><input type="hidden" name="price" value="270"><input type="hidden" name="table_number" class="table-hidden-input" value="Takeaway"><input type="text" name="note" class="note-input" placeholder="Custom requests..."><button type="submit">Order Now</button></form></div></div>
+        </div>
+
+        <!-- NOODLES & PASTA -->
+        <h2 class="section-title" id="noodles">Noodles & Pasta</h2>
+        <div class="menu-grid">
+            <div class="card"><div class="card-img-box"><img src="IMG_6291.webp" alt="Current Noodles" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';"><div class="placeholder-text" style="display:none;">Current Noodles</div></div><div class="card-info"><div><h3>Current Noodles</h3><p>Noodles Item</p></div><form class="ajax-order-form"><div class="price">Rs. 125</div><input type="hidden" name="item" value="Current Noodles"><input type="hidden" name="price" value="125"><input type="hidden" name="table_number" class="table-hidden-input" value="Takeaway"><input type="text" name="note" class="note-input" placeholder="Custom requests..."><button type="submit">Order Now</button></form></div></div>
+            <div class="card"><div class="card-img-box"><img src="cnoodles2.webp" alt="Chicken Noodles" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';"><div class="placeholder-text" style="display:none;">Chicken Noodles</div></div><div class="card-info"><div><h3>Chicken Noodles</h3><p>Noodles Item</p></div><form class="ajax-order-form"><div class="price">Rs. 225</div><input type="hidden" name="item" value="Chicken Noodles"><input type="hidden" name="price" value="225"><input type="hidden" name="table_number" class="table-hidden-input" value="Takeaway"><input type="text" name="note" class="note-input" placeholder="Custom requests..."><button type="submit">Order Now</button></form></div></div>
+            <div class="card"><div class="card-img-box"><img src="vegnoodles.webp" alt="Veg Noodles" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';"><div class="placeholder-text" style="display:none;">Veg Noodles</div></div><div class="card-info"><div><h3>Veg Noodles</h3><p>Noodles Item</p></div><form class="ajax-order-form"><div class="price">Rs. 180</div><input type="hidden" name="item" value="Veg Noodles"><input type="hidden" name="price" value="180"><input type="hidden" name="table_number" class="table-hidden-input" value="Takeaway"><input type="text" name="note" class="note-input" placeholder="Custom requests..."><button type="submit">Order Now</button></form></div></div>
+            <div class="card"><div class="card-img-box"><img src="keema3.webp" alt="Keema Noodles" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';"><div class="placeholder-text" style="display:none;">Keema Noodles</div></div><div class="card-info"><div><h3>Keema Noodles</h3><p>Noodles Item</p></div><form class="ajax-order-form"><div class="price">Rs. 320</div><input type="hidden" name="item" value="Keema Noodles"><input type="hidden" name="price" value="320"><input type="hidden" name="table_number" class="table-hidden-input" value="Takeaway"><input type="text" name="note" class="note-input" placeholder="Custom requests..."><button type="submit">Order Now</button></form></div></div>
+            <div class="card"><div class="card-img-box"><img src="placeholder.webp" alt="Spaghetti Napoitana" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';"><div class="placeholder-text" style="display:none;">Spaghetti Napoitana</div></div><div class="card-info"><div><h3>Spaghetti Napoitana</h3><p>Spaghetti</p></div><form class="ajax-order-form"><div class="price">Rs. 275</div><input type="hidden" name="item" value="Spaghetti Napoitana"><input type="hidden" name="price" value="275"><input type="hidden" name="table_number" class="table-hidden-input" value="Takeaway"><input type="text" name="note" class="note-input" placeholder="Custom requests..."><button type="submit">Order Now</button></form></div></div>
+            <div class="card"><div class="card-img-box"><img src="sc.webp" alt="Spaghetti Carbonara" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';"><div class="placeholder-text" style="display:none;">Spaghetti Carbonara</div></div><div class="card-info"><div><h3>Spaghetti Carbonara</h3><p>Spaghetti</p></div><form class="ajax-order-form"><div class="price">Rs. 355</div><input type="hidden" name="item" value="Spaghetti Carbonara"><input type="hidden" name="price" value="355"><input type="hidden" name="table_number" class="table-hidden-input" value="Takeaway"><input type="text" name="note" class="note-input" placeholder="Custom requests..."><button type="submit">Order Now</button></form></div></div>
+        </div>
+
+        <!-- BURGER & SANDWICH -->
+        <h2 class="section-title" id="burger">Burger & Sandwich</h2>
+        <div class="menu-grid">
+            <div class="card"><div class="card-img-box"><img src="placeholder.webp" alt="Grilled Chicken Burger" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';"><div class="placeholder-text" style="display:none;">Grilled Chicken Burger</div></div><div class="card-info"><div><h3>Grilled Chicken Burger</h3><p>Burger</p></div><form class="ajax-order-form"><div class="price">Rs. 280</div><input type="hidden" name="item" value="Grilled Chicken Burger"><input type="hidden" name="price" value="280"><input type="hidden" name="table_number" class="table-hidden-input" value="Takeaway"><input type="text" name="note" class="note-input" placeholder="Custom requests..."><button type="submit">Order Now</button></form></div></div>
+            <div class="card"><div class="card-img-box"><img src="Cburger.webp" alt="Crunchy Chicken Burger" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';"><div class="placeholder-text" style="display:none;">Crunchy Chicken Burger</div></div><div class="card-info"><div><h3>Crunchy Chicken Burger</h3><p>Burger</p></div><form class="ajax-order-form"><div class="price">Rs. 350</div><input type="hidden" name="item" value="Crunchy Chicken Burger"><input type="hidden" name="price" value="350"><input type="hidden" name="table_number" class="table-hidden-input" value="Takeaway"><input type="text" name="note" class="note-input" placeholder="Custom requests..."><button type="submit">Order Now</button></form></div></div>
+            <div class="card"><div class="card-img-box"><img src="Vburger.webp" alt="Crispy Veggie Burger" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';"><div class="placeholder-text" style="display:none;">Crispy Veggie Burger</div></div><div class="card-info"><div><h3>Crispy Veggie Burger</h3><p>Burger</p></div><form class="ajax-order-form"><div class="price">Rs. 250</div><input type="hidden" name="item" value="Crispy Veggie Burger"><input type="hidden" name="price" value="250"><input type="hidden" name="table_number" class="table-hidden-input" value="Takeaway"><input type="text" name="note" class="note-input" placeholder="Custom requests..."><button type="submit">Order Now</button></form></div></div>
+            <div class="card"><div class="card-img-box"><img src="placeholder.webp" alt="Grilled Chicken Sandwich" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';"><div class="placeholder-text" style="display:none;">Grilled Chicken Sandwich</div></div><div class="card-info"><div><h3>Grilled Chicken Sandwich</h3><p>Sandwich</p></div><form class="ajax-order-form"><div class="price">Rs. 250</div><input type="hidden" name="item" value="Grilled Chicken Sandwich"><input type="hidden" name="price" value="250"><input type="hidden" name="table_number" class="table-hidden-input" value="Takeaway"><input type="text" name="note" class="note-input" placeholder="Custom requests..."><button type="submit">Order Now</button></form></div></div>
+            <div class="card"><div class="card-img-box"><img src="vsandwich.webp" alt="Club Sandwich" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';"><div class="placeholder-text" style="display:none;">Club Sandwich</div></div><div class="card-info"><div><h3>Club Sandwich (Chi)</h3><p>Sandwich</p></div><form class="ajax-order-form"><div class="price">Rs. 320</div><input type="hidden" name="item" value="Club Sandwich Chi"><input type="hidden" name="price" value="320"><input type="hidden" name="table_number" class="table-hidden-input" value="Takeaway"><input type="text" name="note" class="note-input" placeholder="Custom requests..."><button type="submit">Order Now</button></form></div></div>
+        </div>
+
+        <!-- PIZZA -->
+        <h2 class="section-title" id="pizza">Pizza Item</h2>
+        <div class="menu-grid">
+            <div class="card"><div class="card-img-box"><img src="IMG_6302.webp" alt="Pepperoni Pizza" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';"><div class="placeholder-text" style="display:none;">Pepperoni Pizza</div></div><div class="card-info"><div><h3>Pepperoni Pizza</h3><p>Pizza Item</p></div><form class="ajax-order-form"><div class="price">Rs. 550</div><input type="hidden" name="item" value="Pepperoni Pizza"><input type="hidden" name="price" value="550"><input type="hidden" name="table_number" class="table-hidden-input" value="Takeaway"><input type="text" name="note" class="note-input" placeholder="Custom requests..."><button type="submit">Order Now</button></form></div></div>
+            <div class="card"><div class="card-img-box"><img src="mpizza.webp" alt="Marguerite Pizza" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';"><div class="placeholder-text" style="display:none;">Marguerite Pizza</div></div><div class="card-info"><div><h3>Marguerite Pizza</h3><p>Pizza Item</p></div><form class="ajax-order-form"><div class="price">Rs. 500</div><input type="hidden" name="item" value="Marguerite Pizza"><input type="hidden" name="price" value="500"><input type="hidden" name="table_number" class="table-hidden-input" value="Takeaway"><input type="text" name="note" class="note-input" placeholder="Custom requests..."><button type="submit">Order Now</button></form></div></div>
+            <div class="card"><div class="card-img-box"><img src="Vpizza.webp" alt="Mix Veg Pizza" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';"><div class="placeholder-text" style="display:none;">Mix Veg Pizza</div></div><div class="card-info"><div><h3>Mix Veg Pizza</h3><p>Pizza Item</p></div><form class="ajax-order-form"><div class="price">Rs. 550</div><input type="hidden" name="item" value="Mix Veg Pizza"><input type="hidden" name="price" value="550"><input type="hidden" name="table_number" class="table-hidden-input" value="Takeaway"><input type="text" name="note" class="note-input" placeholder="Custom requests..."><button type="submit">Order Now</button></form></div></div>
+            <div class="card"><div class="card-img-box"><img src="Cpizza.webp" alt="Chicken Pizza" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';"><div class="placeholder-text" style="display:none;">Chicken Pizza</div></div><div class="card-info"><div><h3>Chicken Pizza</h3><p>Pizza Item</p></div><form class="ajax-order-form"><div class="price">Rs. 600</div><input type="hidden" name="item" value="Chicken Pizza"><input type="hidden" name="price" value="600"><input type="hidden" name="table_number" class="table-hidden-input" value="Takeaway"><input type="text" name="note" class="note-input" placeholder="Custom requests..."><button type="submit">Order Now</button></form></div></div>
+            <div class="card"><div class="card-img-box"><img src="bbqp.webp" alt="Barbeque Chicken Pizza" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';"><div class="placeholder-text" style="display:none;">Barbeque Chicken Pizza</div></div><div class="card-info"><div><h3>Barbeque Chicken Pizza</h3><p>Pizza Item</p></div><form class="ajax-order-form"><div class="price">Rs. 650</div><input type="hidden" name="item" value="Barbeque Chicken Pizza"><input type="hidden" name="price" value="650"><input type="hidden" name="table_number" class="table-hidden-input" value="Takeaway"><input type="text" name="note" class="note-input" placeholder="Custom requests..."><button type="submit">Order Now</button></form></div></div>
+        </div>
+
+        <!-- VEG STARTER -->
+        <h2 class="section-title" id="veg">Veg. Starter</h2>
+        <div class="menu-grid">
+            <div class="card"><div class="card-img-box"><img src="IMG_6294.webp" alt="Mushroom Choila" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';"><div class="placeholder-text" style="display:none;">Mushroom Choila</div></div><div class="card-info"><div><h3>Mushroom Choila</h3><p>Veg. Starter</p></div><form class="ajax-order-form"><div class="price">Rs. 390</div><input type="hidden" name="item" value="Mushroom Choila"><input type="hidden" name="price" value="390"><input type="hidden" name="table_number" class="table-hidden-input" value="Takeaway"><input type="text" name="note" class="note-input" placeholder="Custom requests..."><button type="submit">Order Now</button></form></div></div>
+            <div class="card"><div class="card-img-box"><img src="IMG_6295.webp" alt="Paneer Pakoda" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';"><div class="placeholder-text" style="display:none;">Paneer Pakoda</div></div><div class="card-info"><div><h3>Paneer Pakoda</h3><p>Veg. Starter</p></div><form class="ajax-order-form"><div class="price">Rs. 325</div><input type="hidden" name="item" value="Paneer Pakoda"><input type="hidden" name="price" value="325"><input type="hidden" name="table_number" class="table-hidden-input" value="Takeaway"><input type="text" name="note" class="note-input" placeholder="Custom requests..."><button type="submit">Order Now</button></form></div></div>
+            <div class="card"><div class="card-img-box"><img src="IMG_6292.webp" alt="Mix Veg Pakoda" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';"><div class="placeholder-text" style="display:none;">Mix Veg Pakoda</div></div><div class="card-info"><div><h3>Mix Veg Pakoda</h3><p>Veg. Starter</p></div><form class="ajax-order-form"><div class="price">Rs. 225</div><input type="hidden" name="item" value="Mix Veg Pakoda"><input type="hidden" name="price" value="225"><input type="hidden" name="table_number" class="table-hidden-input" value="Takeaway"><input type="text" name="note" class="note-input" placeholder="Custom requests..."><button type="submit">Order Now</button></form></div></div>
+            <div class="card"><div class="card-img-box"><img src="ffries.webp" alt="French fries" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';"><div class="placeholder-text" style="display:none;">French fries</div></div><div class="card-info"><div><h3>French fries</h3><p>Veg. Starter</p></div><form class="ajax-order-form"><div class="price">Rs. 225</div><input type="hidden" name="item" value="French fries"><input type="hidden" name="price" value="225"><input type="hidden" name="table_number" class="table-hidden-input" value="Takeaway"><input type="text" name="note" class="note-input" placeholder="Custom requests..."><button type="submit">Order Now</button></form></div></div>
+            <div class="card"><div class="card-img-box"><img src="pchilli3.webp" alt="Paneer chilly" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';"><div class="placeholder-text" style="display:none;">Paneer chilly</div></div><div class="card-info"><div><h3>Paneer chilly</h3><p>Veg. Starter</p></div><form class="ajax-order-form"><div class="price">Rs. 370</div><input type="hidden" name="item" value="Paneer chilly"><input type="hidden" name="price" value="370"><input type="hidden" name="table_number" class="table-hidden-input" value="Takeaway"><input type="text" name="note" class="note-input" placeholder="Custom requests..."><button type="submit">Order Now</button></form></div></div>
+            <div class="card"><div class="card-img-box"><img src="Maloo.webp" alt="Mustang alu" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';"><div class="placeholder-text" style="display:none;">Mustang alu</div></div><div class="card-info"><div><h3>Mustang alu</h3><p>Veg. Starter</p></div><form class="ajax-order-form"><div class="price">Rs. 270</div><input type="hidden" name="item" value="Mustang alu"><input type="hidden" name="price" value="270"><input type="hidden" name="table_number" class="table-hidden-input" value="Takeaway"><input type="text" name="note" class="note-input" placeholder="Custom requests..."><button type="submit">Order Now</button></form></div></div>
+            <div class="card"><div class="card-img-box"><img src="vegq2.webp" alt="Veg Quesadilla" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';"><div class="placeholder-text" style="display:none;">Veg Quesadilla</div></div><div class="card-info"><div><h3>Veg. Quesadilla</h3><p>Signature Item</p></div><form class="ajax-order-form"><div class="price">Rs. 400</div><input type="hidden" name="item" value="Veg Quesadilla"><input type="hidden" name="price" value="400"><input type="hidden" name="table_number" class="table-hidden-input" value="Takeaway"><input type="text" name="note" class="note-input" placeholder="Custom requests..."><button type="submit">Order Now</button></form></div></div>
+            <div class="card"><div class="card-img-box"><img src="IMG_6303.webp" alt="Dynamite Fries" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';"><div class="placeholder-text" style="display:none;">Dynamite Fries</div></div><div class="card-info"><div><h3>Dynamite Fries</h3><p>Signature Item</p></div><form class="ajax-order-form"><div class="price">Rs. 300</div><input type="hidden" name="item" value="Dynamite Fries"><input type="hidden" name="price" value="300"><input type="hidden" name="table_number" class="table-hidden-input" value="Takeaway"><input type="text" name="note" class="note-input" placeholder="Custom requests..."><button type="submit">Order Now</button></form></div></div>
+        </div>
+
+        <!-- NON VEG STARTER -->
+        <h2 class="section-title" id="nonveg">Non Veg Starter & Signature</h2>
+        <div class="menu-grid">
+            <div class="card"><div class="card-img-box"><img src="IMG_6300.webp" alt="Drumstick" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';"><div class="placeholder-text" style="display:none;">Drumstick</div></div><div class="card-info"><div><h3>Drumstick</h3><p>Non Veg Starter</p></div><form class="ajax-order-form"><div class="price">Rs. 350</div><input type="hidden" name="item" value="Drumstick"><input type="hidden" name="price" value="350"><input type="hidden" name="table_number" class="table-hidden-input" value="Takeaway"><input type="text" name="note" class="note-input" placeholder="Custom requests..."><button type="submit">Order Now</button></form></div></div>
+            <div class="card"><div class="card-img-box"><img src="cnuggets.webp" alt="Chicken Nuggets" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';"><div class="placeholder-text" style="display:none;">Chicken Nuggets</div></div><div class="card-info"><div><h3>Chicken Nuggets</h3><p>Non Veg Starter</p></div><form class="ajax-order-form"><div class="price">Rs. 375</div><input type="hidden" name="item" value="Chicken Nuggets"><input type="hidden" name="price" value="375"><input type="hidden" name="table_number" class="table-hidden-input" value="Takeaway"><input type="text" name="note" class="note-input" placeholder="Custom requests..."><button type="submit">Order Now</button></form></div></div>
+            <div class="card"><div class="card-img-box"><img src="hcwings.webp" alt="Hot wings" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';"><div class="placeholder-text" style="display:none;">Hot wings</div></div><div class="card-info"><div><h3>Hot wings</h3><p>Non Veg Starter</p></div><form class="ajax-order-form"><div class="price">Rs. 525</div><input type="hidden" name="item" value="Hot wings"><input type="hidden" name="price" value="525"><input type="hidden" name="table_number" class="table-hidden-input" value="Takeaway"><input type="text" name="note" class="note-input" placeholder="Custom requests..."><button type="submit">Order Now</button></form></div></div>
+            <div class="card"><div class="card-img-box"><img src="placeholder.webp" alt="Chicken Chilly" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';"><div class="placeholder-text" style="display:none;">Chicken Chilly</div></div><div class="card-info"><div><h3>Chicken Chilly</h3><p>Non Veg Starter</p></div><form class="ajax-order-form"><div class="price">Rs. 370</div><input type="hidden" name="item" value="Chicken Chilly"><input type="hidden" name="price" value="370"><input type="hidden" name="table_number" class="table-hidden-input" value="Takeaway"><input type="text" name="note" class="note-input" placeholder="Custom requests..."><button type="submit">Order Now</button></form></div></div>
+            <div class="card"><div class="card-img-box"><img src="cq.webp" alt="Chicken Quesadilla" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';"><div class="placeholder-text" style="display:none;">Chicken Quesadilla</div></div><div class="card-info"><div><h3>Chicken Quesadilla</h3><p>Signature Item</p></div><form class="ajax-order-form"><div class="price">Rs. 450</div><input type="hidden" name="item" value="Chicken Quesadilla"><input type="hidden" name="price" value="450"><input type="hidden" name="table_number" class="table-hidden-input" value="Takeaway"><input type="text" name="note" class="note-input" placeholder="Custom requests..."><button type="submit">Order Now</button></form></div></div>
+            <div class="card"><div class="card-img-box"><img src="hgarlicc.webp" alt="Spicy Garlic Wings" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';"><div class="placeholder-text" style="display:none;">Spicy Garlic Wings</div></div><div class="card-info"><div><h3>Spicy Garlic Wings</h3><p>Signature Item</p></div><form class="ajax-order-form"><div class="price">Rs. 480</div><input type="hidden" name="item" value="Spicy Garlic Wings"><input type="hidden" name="price" value="480"><input type="hidden" name="table_number" class="table-hidden-input" value="Takeaway"><input type="text" name="note" class="note-input" placeholder="Custom requests..."><button type="submit">Order Now</button></form></div></div>
+        </div>
+
+        <!-- RICE & CURRY -->
+        <h2 class="section-title" id="rice">Rice & Curry</h2>
+        <div class="menu-grid">
+            <div class="card"><div class="card-img-box"><img src="sez.webp" alt="Chicken Szechwan Rice" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';"><div class="placeholder-text" style="display:none;">Chicken Szechwan Rice</div></div><div class="card-info"><div><h3>Chicken Szechwan</h3><p>Rice Item</p></div><form class="ajax-order-form"><div class="price">Rs. 260</div><input type="hidden" name="item" value="Chicken Szechwan Rice"><input type="hidden" name="price" value="260"><input type="hidden" name="table_number" class="table-hidden-input" value="Takeaway"><input type="text" name="note" class="note-input" placeholder="Custom requests..."><button type="submit">Order Now</button></form></div></div>
+            <div class="card"><div class="card-img-box"><img src="cbiryani.webp" alt="Chicken Biryani" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';"><div class="placeholder-text" style="display:none;">Chicken Biryani</div></div><div class="card-info"><div><h3>Chicken Biryani</h3><p>Rice Item</p></div><form class="ajax-order-form"><div class="price">Rs. 550</div><input type="hidden" name="item" value="Chicken Biryani"><input type="hidden" name="price" value="550"><input type="hidden" name="table_number" class="table-hidden-input" value="Takeaway"><input type="text" name="note" class="note-input" placeholder="Custom requests..."><button type="submit">Order Now</button></form></div></div>
+            <div class="card"><div class="card-img-box"><img src="IMG_6283.webp" alt="Chicken Curry" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';"><div class="placeholder-text" style="display:none;">Chicken Curry</div></div><div class="card-info"><div><h3>Chicken Curry</h3><p>Curry</p></div><form class="ajax-order-form"><div class="price">Rs. 350</div><input type="hidden" name="item" value="Chicken Curry"><input type="hidden" name="price" value="350"><input type="hidden" name="table_number" class="table-hidden-input" value="Takeaway"><input type="text" name="note" class="note-input" placeholder="Custom requests..."><button type="submit">Order Now</button></form></div></div>
+            <div class="card"><div class="card-img-box"><img src="IMG_6285.webp" alt="Mix Veg Curry" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';"><div class="placeholder-text" style="display:none;">Mix Veg Curry</div></div><div class="card-info"><div><h3>Mix Veg Curry</h3><p>Curry</p></div><form class="ajax-order-form"><div class="price">Rs. 300</div><input type="hidden" name="item" value="Mix Veg Curry"><input type="hidden" name="price" value="300"><input type="hidden" name="table_number" class="table-hidden-input" value="Takeaway"><input type="text" name="note" class="note-input" placeholder="Custom requests..."><button type="submit">Order Now</button></form></div></div>
+             <div class="card"><div class="card-img-box"><img src="vbiryani.webp" alt="Veg Biryani" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';"><div class="placeholder-text" style="display:none;">Veg Biryani</div></div><div class="card-info"><div><h3>Veg Biryani</h3><p>Rice Item</p></div><form class="ajax-order-form"><div class="price">Rs. 550</div><input type="hidden" name="item" value="Veg Biryani"><input type="hidden" name="price" value="550"><input type="hidden" name="table_number" class="table-hidden-input" value="Takeaway"><input type="text" name="note" class="note-input" placeholder="Custom requests..."><button type="submit">Order Now</button></form></div></div>
+        </div>
+
+        <!-- SOUP & SALAD -->
+        <h2 class="section-title" id="soup">Soup & Salad</h2>
+        <div class="menu-grid">
+            <div class="card"><div class="card-img-box"><img src="fruits.webp" alt="Fruits Salad" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';"><div class="placeholder-text" style="display:none;">Fruits Salad</div></div><div class="card-info"><div><h3>Fruits Salad</h3><p>Salad</p></div><form class="ajax-order-form"><div class="price">Rs. 325</div><input type="hidden" name="item" value="Fruits Salad"><input type="hidden" name="price" value="325"><input type="hidden" name="table_number" class="table-hidden-input" value="Takeaway"><input type="text" name="note" class="note-input" placeholder="Custom requests..."><button type="submit">Order Now</button></form></div></div>
+            <div class="card"><div class="card-img-box"><img src="placeholder.webp" alt="Chicken Ceaser Salad" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';"><div class="placeholder-text" style="display:none;">Chicken Ceaser Salad</div></div><div class="card-info"><div><h3>Chicken Ceaser Salad</h3><p>Salad</p></div><form class="ajax-order-form"><div class="price">Rs. 350</div><input type="hidden" name="item" value="Chicken Ceaser Salad"><input type="hidden" name="price" value="350"><input type="hidden" name="table_number" class="table-hidden-input" value="Takeaway"><input type="text" name="note" class="note-input" placeholder="Custom requests..."><button type="submit">Order Now</button></form></div></div>
+            <div class="card"><div class="card-img-box"><img src="chhs.webp" alt="Hot & sour soup" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';"><div class="placeholder-text" style="display:none;">Hot & sour soup</div></div><div class="card-info"><div><h3>Hot & sour soup (Chicken)</h3><p>Soup</p></div><form class="ajax-order-form"><div class="price">Rs. 225</div><input type="hidden" name="item" value="Hot & sour soup Chicken"><input type="hidden" name="price" value="225"><input type="hidden" name="table_number" class="table-hidden-input" value="Takeaway"><input type="text" name="note" class="note-input" placeholder="Custom requests..."><button type="submit">Order Now</button></form></div></div>
+            <div class="card"><div class="card-img-box"><img src="mcsoup.webp" alt="Mushroom soup" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';"><div class="placeholder-text" style="display:none;">Mushroom soup</div></div><div class="card-info"><div><h3>Mushroom soup (Chicken)</h3><p>Soup</p></div><form class="ajax-order-form"><div class="price">Rs. 355</div><input type="hidden" name="item" value="Mushroom soup Chicken"><input type="hidden" name="price" value="355"><input type="hidden" name="table_number" class="table-hidden-input" value="Takeaway"><input type="text" name="note" class="note-input" placeholder="Custom requests..."><button type="submit">Order Now</button></form></div></div>
+        </div>
+
+        <!-- SETS & PLATTERS -->
+        <h2 class="section-title" id="sets">Sets & Platters</h2>
+        <div class="menu-grid">
+            <div class="card"><div class="card-img-box"><img src="placeholder.webp" alt="Chicken Khaja Set" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';"><div class="placeholder-text" style="display:none;">Chicken Khaja Set</div></div><div class="card-info"><div><h3>Chicken Khaja Set</h3><p>Sets</p></div><form class="ajax-order-form"><div class="price">Rs. 650</div><input type="hidden" name="item" value="Chicken Khaja Set"><input type="hidden" name="price" value="650"><input type="hidden" name="table_number" class="table-hidden-input" value="Takeaway"><input type="text" name="note" class="note-input" placeholder="Custom requests..."><button type="submit">Order Now</button></form></div></div>
+            <div class="card"><div class="card-img-box"><img src="placeholder.webp" alt="Veg Khaja Set" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';"><div class="placeholder-text" style="display:none;">Veg Khaja Set</div></div><div class="card-info"><div><h3>Veg Khaja Set</h3><p>Sets</p></div><form class="ajax-order-form"><div class="price">Rs. 550</div><input type="hidden" name="item" value="Veg Khaja Set"><input type="hidden" name="price" value="550"><input type="hidden" name="table_number" class="table-hidden-input" value="Takeaway"><input type="text" name="note" class="note-input" placeholder="Custom requests..."><button type="submit">Order Now</button></form></div></div>
+            <div class="card"><div class="card-img-box"><img src="placeholder.webp" alt="Wings Platters" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';"><div class="placeholder-text" style="display:none;">Wings Platters</div></div><div class="card-info"><div><h3>Wings Platters</h3><p>Platters</p></div><form class="ajax-order-form"><div class="price">Rs. 1050</div><input type="hidden" name="item" value="Wings Platters"><input type="hidden" name="price" value="1050"><input type="hidden" name="table_number" class="table-hidden-input" value="Takeaway"><input type="text" name="note" class="note-input" placeholder="Custom requests..."><button type="submit">Order Now</button></form></div></div>
+            <div class="card"><div class="card-img-box"><img src="placeholder.webp" alt="Momo Platter" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';"><div class="placeholder-text" style="display:none;">Momo Platter</div></div><div class="card-info"><div><h3>Momo Platter</h3><p>Platters</p></div><form class="ajax-order-form"><div class="price">Rs. 950</div><input type="hidden" name="item" value="Momo Platter"><input type="hidden" name="price" value="950"><input type="hidden" name="table_number" class="table-hidden-input" value="Takeaway"><input type="text" name="note" class="note-input" placeholder="Custom requests..."><button type="submit">Order Now</button></form></div></div>
+        </div>
+
+    </main>
+</div>
+
+<div class="floating-cart-trigger" id="floatingCartBtn" style="display: none;" onclick="toggleCartDrawer(true)">
+    <span>🛒 View Order Cart</span>
+    <span class="floating-cart-count" id="cartCountBadge">0</span>
+</div>
+
+<div class="cart-drawer-overlay" id="cartDrawerOverlay" onclick="toggleCartDrawer(false)"></div>
+<div class="cart-drawer" id="cartDrawer">
+    <div class="cart-header">
+        <h2>Your Selected Order</h2>
+        <button class="cart-close-btn" onclick="toggleCartDrawer(false)">✕</button>
+    </div>
+    <div class="cart-items-list" id="cartItemsContainer"></div>
+    <div class="cart-footer">
+        <div class="cart-total-row">
+            <span>Total Amount:</span>
+            <span class="cart-total-price" id="cartTotalPrice">Rs. 0</span>
+        </div>
+        <button id="cartSubmitBtn" onclick="submitFullCartToKitchen()">Send Complete Order to Kitchen</button>
+    </div>
+</div>
+
+<div class="order-tracker-panel" id="customerOrderTracker">
+    <div class="tracker-container">
+        <div class="tracker-info">
+            <h4 id="trackItemTitle">Your Order: Item Name</h4>
+            <p id="trackItemNote">Special Request: None</p>
+        </div>
+        <div class="tracker-actions">
+            <button class="btn-track-edit" onclick="triggerCustomerEdit()">✏️ Edit Note</button>
+            <button class="btn-track-cancel" onclick="triggerCustomerCancel()">❌ Cancel Order</button>
+        </div>
+    </div>
+</div>
+
+<div class="popup-overlay" id="successPopup">
+    <div class="popup-box">
+        <div class="popup-icon">✓</div>
+        <h2>Order Sent!</h2>
+        <p id="popupMessage">Your order details have been securely sent directly to the kitchen.</p>
+        <button class="btn-close" onclick="closeNotificationPopup()">Awesome!</button>
+    </div>
+</div>
+
+<script>
+    
+    window.addEventListener('load', function() {
+    const loader = document.getElementById('page-loader');
+    if (loader) {
+        loader.style.opacity = '0';
+        setTimeout(() => {
+            loader.style.display = 'none';
+        }, 500); // Matches the 0.5s transition time
+    }
+});
+    let orderShoppingCart = [];
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const tableNum = urlParams.get('table');
+    const displayBanner = document.getElementById('tableDisplay');
+    const hiddenInputs = document.querySelectorAll('.table-hidden-input');
+
+    let activeTrackedOrderId = null;
+    let activeTrackedItemName = "";
+
+    if (tableNum) {
+        displayBanner.textContent = "📍 Table Number: " + tableNum;
+        hiddenInputs.forEach(input => input.value = tableNum);
+    } else {
+        displayBanner.textContent = "🥡 Order Mode: Digital Takeaway";
+        hiddenInputs.forEach(input => input.value = "Takeaway");
+    }
+
+    function filterFoodLedgerMenu() {
+        const query = document.getElementById('foodSearchBox').value.toLowerCase().trim();
+        const mainContent = document.querySelector('.content-area');
+        if (!mainContent) return;
+
+        const children = Array.from(mainContent.children);
+        let currentTitleElement = null;
+        let matchCountInGrid = 0;
+
+        children.forEach(child => {
+            if (child.classList.contains('section-title')) {
+                if (currentTitleElement) {
+                    currentTitleElement.style.display = (matchCountInGrid > 0 || query === "") ? "flex" : "none";
+                }
+                currentTitleElement = child;
+                matchCountInGrid = 0; 
+            }
+
+            if (child.classList.contains('menu-grid') || child.classList.contains('featured-card')) {
+                const foodCards = child.classList.contains('card') ? [child] : Array.from(child.querySelectorAll('.card'));
+                let visibleCardsInThisGrid = 0;
+
+                foodCards.forEach(card => {
+                    const titleNode = card.querySelector('h3');
+                    const descNode = card.querySelector('p');
+
+                    const foodTitle = titleNode ? titleNode.textContent.toLowerCase() : "";
+                    const foodDesc = descNode ? descNode.textContent.toLowerCase() : "";
+
+                    if (foodTitle.includes(query) || foodDesc.includes(query)) {
+                        card.style.display = "flex";
+                        card.style.opacity = "1";
+                        visibleCardsInThisGrid++;
+                        matchCountInGrid++;
+
+                        const image = card.querySelector('.card-img-box img');
+                        if (image && image.style.display === 'none') {
+                            image.style.display = 'block';
+                            const placeholder = card.querySelector('.placeholder-text');
+                            if (placeholder) placeholder.style.display = 'none';
+                        }
+                    } else {
+                        card.style.display = "none";
+                        card.style.opacity = "0";
+                    }
+                });
+
+                if (child.classList.contains('menu-grid')) {
+                    child.style.display = (visibleCardsInThisGrid > 0 || query === "") ? "grid" : "none";
+                } else {
+                    child.style.display = (visibleCardsInThisGrid > 0 || query === "") ? "flex" : "none";
+                }
+            }
+        });
+
+        if (currentTitleElement) {
+            currentTitleElement.style.display = (matchCountInGrid > 0 || query === "") ? "flex" : "none";
+        }
+    }
+
+    function openMobileSidebar() {
+        document.getElementById('categoriesSidebar').classList.add('open');
+        document.getElementById('menuOverlay').classList.add('show');
+    }
+
+    function closeMobileSidebar() {
+        document.getElementById('categoriesSidebar').classList.remove('open');
+        document.getElementById('menuOverlay').classList.remove('show');
+    }
+
+    function handleCategoryClick(event, targetID) {
+        event.preventDefault(); 
+        const clickedAnchor = event.currentTarget;
+        document.querySelectorAll('.category-item').forEach(li => li.classList.remove('active'));
+        clickedAnchor.parentElement.classList.add('active');
+        closeMobileSidebar();
+
+        const destinationElement = document.querySelector(targetID);
+        if (destinationElement) {
+            const headerHeight = document.querySelector('header').offsetHeight;
+            const elementPosition = destinationElement.getBoundingClientRect().top + window.pageYOffset;
+            const offsetPosition = elementPosition - headerHeight - 15; 
+            window.scrollTo({ top: offsetPosition, behavior: 'smooth' });
+        }
+    }
+
+    function toggleCartDrawer(show) {
+        const overlay = document.getElementById('cartDrawerOverlay');
+        const drawer = document.getElementById('cartDrawer');
+        if (show) {
+            renderCartContents();
+            overlay.classList.add('show');
+            drawer.classList.add('show');
+        } else {
+            overlay.classList.remove('show');
+            drawer.classList.remove('show');
+        }
+    }
+
+    document.querySelectorAll('.ajax-order-form').forEach(form => {
+        form.addEventListener('submit', function(e) {
+            e.preventDefault(); 
+            
+            const itemName = this.querySelector('input[name="item"]').value;
+            const itemPrice = parseInt(this.querySelector('input[name="price"]').value);
+            const initialNote = this.querySelector('.note-input').value;
+            
+            const existingItem = orderShoppingCart.find(cartItem => cartItem.name === itemName);
+            
+            if (existingItem) {
+                existingItem.quantity += 1;
+                if (initialNote && !existingItem.note.includes(initialNote)) {
+                    existingItem.note += (existingItem.note ? ", " : "") + initialNote;
+                }
+            } else {
+                orderShoppingCart.push({
+                    name: itemName,
+                    price: itemPrice,
+                    quantity: 1,
+                    note: initialNote
+                });
+            }
+            
+            this.querySelector('.note-input').value = '';
+            
+            updateFloatingCartWidget();
+            toggleCartDrawer(true);
+        });
+    });
+
+    function updateFloatingCartWidget() {
+        const totalItemsCount = orderShoppingCart.reduce((sum, current) => sum + current.quantity, 0);
+        const floatingBtn = document.getElementById('floatingCartBtn');
+        const badge = document.getElementById('cartCountBadge');
+        
+        if (totalItemsCount > 0) {
+            badge.textContent = totalItemsCount;
+            floatingBtn.style.display = 'flex';
+        } else {
+            floatingBtn.style.display = 'none';
+            toggleCartDrawer(false);
+        }
+    }
+
+    function modifyCartQty(itemName, changeDirection) {
+        const targetIndex = orderShoppingCart.findIndex(item => item.name === itemName);
+        if (targetIndex > -1) {
+            orderShoppingCart[targetIndex].quantity += changeDirection;
+            if (orderShoppingCart[targetIndex].quantity <= 0) {
+                orderShoppingCart.splice(targetIndex, 1);
+            }
+        }
+        updateFloatingCartWidget();
+        renderCartContents();
+    }
+
+    function updateCartItemNote(itemName, noteTextValue) {
+        const targetItem = orderShoppingCart.find(item => item.name === itemName);
+        if (targetItem) {
+            targetItem.note = noteTextValue;
+        }
+    }
+
+    function renderCartContents() {
+        const listContainer = document.getElementById('cartItemsContainer');
+        const priceTotalDisplay = document.getElementById('cartTotalPrice');
+        listContainer.innerHTML = '';
+        
+        let accumulatedTotalPrice = 0;
+        
+        if (orderShoppingCart.length === 0) {
+            listContainer.innerHTML = '<p style="text-align:center; color:var(--text-muted); padding:20px 0;">Your cart layout is empty.</p>';
+            priceTotalDisplay.textContent = 'Rs. 0';
+            return;
+        }
+        
+        orderShoppingCart.forEach(item => {
+            const rowTotalPrice = item.price * item.quantity;
+            accumulatedTotalPrice += rowTotalPrice;
+            
+            const cartItemHtmlNode = document.createElement('div');
+            cartItemHtmlNode.className = 'cart-item-row';
+            cartItemHtmlNode.innerHTML = `
+                <div class="cart-item-main">
+                    <div class="cart-item-details">
+                        <h4>${item.name}</h4>
+                        <p>Rs. ${item.price}</p>
+                    </div>
+                    <div class="cart-qty-controls">
+                        <button class="cart-qty-btn" onclick="modifyCartQty('${item.name}', -1)">-</button>
+                        <span class="cart-qty-value">${item.quantity}</span>
+                        <button class="cart-qty-btn" onclick="modifyCartQty('${item.name}', 1)">+</button>
+                    </div>
+                </div>
+                <div class="cart-item-note-box">
+                    <input type="text" placeholder="Individual request details..." value="${item.note || ''}" onchange="updateCartItemNote('${item.name}', this.value)">
+                </div>
+            `;
+            listContainer.appendChild(cartItemHtmlNode);
+        });
+        
+        priceTotalDisplay.textContent = `Rs. ${accumulatedTotalPrice}`;
+    }
+
+    function submitFullCartToKitchen() {
+        if (orderShoppingCart.length === 0) return;
+        
+        const submitBtn = document.getElementById('cartSubmitBtn');
+        submitBtn.textContent = "Processing Bundle...";
+        submitBtn.disabled = true;
+
+        const combinedItemsListString = orderShoppingCart.map(i => `${i.name} (x${i.quantity})`).join(', ');
+        const structuredNotesString = orderShoppingCart.map(i => i.note ? `[${i.name}: ${i.note}]` : '').filter(Boolean).join(' ');
+        const finalCalculatedPrice = orderShoppingCart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+        const resolvedTableNum = tableNum || "Takeaway";
+
+        const formData = new FormData();
+        formData.append('item', combinedItemsListString);
+        formData.append('price', finalCalculatedPrice);
+        formData.append('table_number', resolvedTableNum);
+        formData.append('note', structuredNotesString);
+
+        fetch('submit.php', { method: 'POST', body: formData })
+        .then(async response => {
+            const text = await response.text();
+            try { return JSON.parse(text); } catch(err) { throw new Error(text); }
+        })
+        .then(data => {
+            submitBtn.textContent = "Send Complete Order to Kitchen";
+            submitBtn.disabled = false;
+            
+            if(data.status === 'success') {
+                document.getElementById('popupMessage').innerHTML = `Your order for <strong>${data.item}</strong> has been received!`;
+                document.getElementById('successPopup').classList.add('show');
+                
+                activeTrackedOrderId = data.order_id;
+                activeTrackedItemName = data.item;
+                
+                document.getElementById('trackItemTitle').textContent = `Your Live Order: Multi-Item Tray`;
+                document.getElementById('trackItemNote').textContent = structuredNotesString ? `Notes: "${structuredNotesString}"` : `Notes: None`;
+                document.getElementById('customerOrderTracker').style.display = "block";
+                
+                orderShoppingCart = [];
+                updateFloatingCartWidget();
+                toggleCartDrawer(false);
+            } else { alert("Server error: " + data.message); }
+        })
+        .catch(error => {
+            submitBtn.textContent = "Send Complete Order to Kitchen";
+            submitBtn.disabled = false;
+            alert("Order error: " + error.message);
+        });
+    }
+
+    function triggerCustomerEdit() {
+        const revisedNote = prompt("Modify your special request note instructions for this order:");
+        if (revisedNote === null) return; 
+
+        const fd = new FormData();
+        fd.append('action', 'customer_edit');
+        fd.append('order_id', activeTrackedOrderId);
+        fd.append('note', revisedNote);
+
+        fetch('submit.php', { method: 'POST', body: fd })
+        .then(res => res.json())
+        .then(data => {
+            if (data.status === 'success') {
+                document.getElementById('trackItemNote').textContent = revisedNote ? `Note: "${revisedNote}"` : `Note: None`;
+                alert("✅ Special instructions note updated inside the kitchen dashboard!");
+            } else { alert("Could not edit: " + data.message); }
+        });
+    }
+
+    function triggerCustomerCancel() {
+        if (!confirm("Are you sure you want to cancel your order? This will notify the kitchen staff immediately.")) return;
+
+        const fd = new FormData();
+        fd.append('action', 'customer_cancel');
+        fd.append('order_id', activeTrackedOrderId);
+
+        fetch('submit.php', { method: 'POST', body: fd })
+        .then(res => res.json())
+        .then(data => {
+            if (data.status === 'success') {
+                alert("🛑 Your order was cancelled.");
+                document.getElementById('customerOrderTracker').style.display = "none";
+                activeTrackedOrderId = null;
+            } else { alert("Could not cancel: " + data.message); }
+        });
+    }
+</script>
+</body>
+</html>
